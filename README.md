@@ -1,11 +1,15 @@
 # nuxt-vuex-xxx
 
-Examples to make Nuxt and Vuex 3 type-safe
+Examples to make Nuxt and Vuex 3 type-safe.
 
-## Packages to make type-safe?
+If you want to see other examples in Vuex 4, https://github.com/ryotah/vuex-4-xxx might be nice.
 
-- https://github.com/danielroe/typed-vuex
-- https://github.com/ktsn/vuex-smart-module
+## Examples
+
+- https://github.com/ryotah/nuxt-vuex-xxx/tree/examples/nuxt-typed-vuex
+  - This example is using https://github.com/danielroe/typed-vuex
+- https://github.com/ryotah/nuxt-vuex-xxx/tree/examples/vuex-smart-module
+  - This example is using https://github.com/ktsn/vuex-smart-module
 
 ## Build Setup
 
