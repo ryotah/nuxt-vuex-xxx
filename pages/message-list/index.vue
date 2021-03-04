@@ -12,31 +12,25 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapActions, mapState } from 'vuex'
-// Note:
-// You can also use `createNamespacedHelpers`
-// const { mapState, mapActions } = createNamespacedHelpers('some/nested/module')
 
 export default Vue.extend({
   data() {
     return {
+      mapper: this.$accessor.pages.messageList,
       template: 'Hey there! 👋',
     }
   },
   computed: {
-    ...mapState('pages/messageList', ['messages']),
-    ...mapGetters('pages/messageList', ['unread']),
+    messages() {
+      return this.$accessor.pages.messageList.messages
+    },
+    unread() {
+      return this.$accessor.pages.messageList.unread
+    },
   },
   methods: {
-    ...mapActions('pages/messageList', ['addMessage']),
     onClickAddMessage() {
-      // Note:
-      // If you use `dispatch` directly, it will be the following.
-      // this.$store.dispatch("messageList/addMessage", {
-      //   value: this.template,
-      //   read: false
-      // });
-      this.addMessage({
+      this.$accessor.pages.messageList.addMessage({
         value: this.template,
         read: false,
       })

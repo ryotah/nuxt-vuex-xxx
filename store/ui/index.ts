@@ -1,31 +1,32 @@
-import { ActionTree, MutationTree } from 'vuex'
-import { RootState } from '@/store'
-
-export type State = ReturnType<typeof initialState>
+import { mutationTree, actionTree } from 'nuxt-typed-vuex'
 
 function initialState() {
   return { loading: false }
 }
 
-const mutations: MutationTree<State> = {
+const mutations = mutationTree(initialState, {
   showLoading(state) {
     state.loading = true
   },
   hideLoading(state) {
     state.loading = false
   },
-}
+})
 
-const actions: ActionTree<State, RootState> = {
-  showLoading({ commit }) {
-    commit('showLoading')
-  },
-  hideLoading({ commit }) {
-    commit('hideLoading')
-  },
-}
+const actions = actionTree(
+  { state: initialState, mutations },
+  {
+    showLoading({ commit }) {
+      commit('showLoading')
+    },
+    hideLoading({ commit }) {
+      commit('hideLoading')
+    },
+  }
+)
 
 export default {
+  namespaced: true,
   state: initialState,
   getters: {
     test() {

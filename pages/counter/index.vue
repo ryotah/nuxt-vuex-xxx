@@ -8,25 +8,27 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default Vue.extend({
+  data() {
+    return {
+      mapper: this.$accessor.counter,
+    }
+  },
   computed: {
-    ...mapState({
-      // Note:
-      // You can also add a type annotation like `state: CounterState`.
-      // However it may be a little annoying for everyday development.
-      count: (state: any) => state.counter.count,
-    }),
-    ...mapGetters(['evenOrOdd']),
+    count(): number {
+      return this.mapper.count
+    },
+    evenOrOdd(): 'even' | 'odd' {
+      return this.mapper.evenOrOdd
+    },
   },
   methods: {
-    ...mapActions(['increment', 'decrement']),
     onIncrement() {
-      this.increment(1)
+      this.mapper.increment(1)
     },
     onDecrement() {
-      this.decrement(1)
+      this.mapper.decrement(1)
     },
   },
 })
