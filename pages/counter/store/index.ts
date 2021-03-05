@@ -1,49 +1,64 @@
-import { getterTree, mutationTree, actionTree } from 'nuxt-typed-vuex'
+import {
+  Actions,
+  Mutations,
+  Getters,
+  Module,
+  createMapper,
+} from 'vuex-smart-module'
 
-function initialState() {
-  return {
-    count: 0,
+class LocalState {
+  count = 0
+}
+
+class LocalGetters extends Getters<LocalState> {
+  get evenOrOdd() {
+    return this.state.count % 2 === 0 ? 'even' : 'odd'
   }
 }
 
-const getters = getterTree(initialState, {
-  evenOrOdd(state) {
-    return state.count % 2 === 0 ? 'even' : 'odd'
-  },
-})
-
-const mutations = mutationTree(initialState, {
-  increment(state, payload: number) {
-    state.count += payload
-  },
-  decrement(state, payload: number) {
-    state.count -= payload
-  },
-  reset(state) {
-    state.count = 0
-  },
-})
-
-const actions = actionTree(
-  { state: initialState, getters, mutations },
-  {
-    increment({ commit }, payload: number) {
-      commit('increment', payload)
-    },
-    decrement({ commit }, payload: number) {
-      commit('decrement', payload)
-    },
-    reset({ commit }) {
-      commit('reset')
-    },
+class LocalMutations extends Mutations<LocalState> {
+  increment(payload: number) {
+    this.state.count += payload
   }
-)
 
-export default {
+  decrement(payload: number) {
+    this.state.count -= payload
+  }
+
+  reset() {
+    this.state.count = 0
+  }
+}
+
+class LocalActions extends Actions<
+  LocalState,
+  LocalGetters,
+  LocalMutations,
+  LocalActions
+> {
+  increment(payload: number) {
+    this.commit('increment', payload)
+  }
+
+  decrement(payload: number) {
+    this.commit('decrement', payload)
+  }
+
+  reset() {
+    this.commit('reset')
+  }
+}
+
+export const localModule = new Module({
   // Note: No namespace for comparison.
   namespaced: false,
-  state: initialState,
-  getters,
-  mutations,
-  actions,
-}
+  state: LocalState,
+  getters: LocalGetters,
+  mutations: LocalMutations,
+  actions: LocalActions,
+})
+
+// Create mapper
+export const counterMapper = createMapper(localModule)
+
+export default localModule

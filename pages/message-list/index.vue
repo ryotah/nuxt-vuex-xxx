@@ -13,24 +13,26 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import { localModule, Message } from './store'
+
 export default Vue.extend({
   data() {
     return {
-      mapper: this.$accessor.pages.messageList,
+      mapper: localModule.context(this.$store),
       template: 'Hey there! 👋',
     }
   },
   computed: {
-    messages() {
-      return this.$accessor.pages.messageList.messages
+    messages(): Message[] {
+      return this.mapper.state.messages
     },
-    unread() {
-      return this.$accessor.pages.messageList.unread
+    unread(): Message[] {
+      return this.mapper.getters.unread
     },
   },
   methods: {
     onClickAddMessage() {
-      this.$accessor.pages.messageList.addMessage({
+      this.mapper.actions.addMessage({
         value: this.template,
         read: false,
       })

@@ -1,38 +1,50 @@
-import { mutationTree, actionTree } from 'nuxt-typed-vuex'
+import {
+  Actions,
+  Mutations,
+  Getters,
+  Module,
+  createMapper,
+} from 'vuex-smart-module'
 
-function initialState() {
-  return { loading: false }
+class LocalState {
+  loading = false
 }
 
-const mutations = mutationTree(initialState, {
-  showLoading(state) {
-    state.loading = true
-  },
-  hideLoading(state) {
-    state.loading = false
-  },
+class LocalGetters extends Getters<LocalState> {}
+
+class LocalMutations extends Mutations<LocalState> {
+  showLoading() {
+    this.state.loading = true
+  }
+
+  hideLoading() {
+    this.state.loading = false
+  }
+}
+
+class LocalActions extends Actions<
+  LocalState,
+  LocalGetters,
+  LocalMutations,
+  LocalActions
+> {
+  showLoading() {
+    this.commit('showLoading')
+  }
+
+  hideLoading() {
+    this.commit('hideLoading')
+  }
+}
+
+const localModule = new Module({
+  state: LocalState,
+  getters: LocalGetters,
+  mutations: LocalMutations,
+  actions: LocalActions,
 })
 
-const actions = actionTree(
-  { state: initialState, mutations },
-  {
-    showLoading({ commit }) {
-      commit('showLoading')
-    },
-    hideLoading({ commit }) {
-      commit('hideLoading')
-    },
-  }
-)
+// Create mapper
+export const uiMapper = createMapper(localModule)
 
-export default {
-  namespaced: true,
-  state: initialState,
-  getters: {
-    test() {
-      return 'test'
-    },
-  },
-  mutations,
-  actions,
-}
+export default localModule

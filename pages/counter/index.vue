@@ -8,27 +8,31 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { counterMapper, localModule } from './store'
 
 export default Vue.extend({
   data() {
     return {
-      mapper: this.$accessor.counter,
+      mapper: localModule.context(this.$store),
     }
   },
   computed: {
-    count(): number {
-      return this.mapper.count
-    },
+    ...counterMapper.mapState(['count']),
+    // ...counterMapper.mapGetters(['evenOrOdd']),
+    // Or
+    // count(): number {
+    //   return this.mapper.state.count
+    // },
     evenOrOdd(): 'even' | 'odd' {
-      return this.mapper.evenOrOdd
+      return this.mapper.getters.evenOrOdd
     },
   },
   methods: {
     onIncrement() {
-      this.mapper.increment(1)
+      this.mapper.dispatch('increment', 1)
     },
     onDecrement() {
-      this.mapper.decrement(1)
+      this.mapper.actions.decrement(1)
     },
   },
 })
